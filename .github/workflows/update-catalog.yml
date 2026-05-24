@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout catalog repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout OpenSSF malicious-packages
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ossf/malicious-packages
           path: vendor/ossf-malicious-packages
@@ -27,7 +27,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 

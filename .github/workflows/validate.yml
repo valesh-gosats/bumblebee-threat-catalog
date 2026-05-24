@@ -10,10 +10,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -21,4 +21,3 @@ jobs:
         run: |
           python3 scripts/validate_catalog.py catalogs/openssf-malicious-packages.json catalogs/metadata.json
           python3 -m unittest discover -s tests -p 'test_*.py'
-
