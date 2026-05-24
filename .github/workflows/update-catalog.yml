@@ -59,7 +59,7 @@ jobs:
 
       - name: Create pull request
         if: steps.changes.outputs.has_changes == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore: refresh Bumblebee threat catalog"
           title: "chore: refresh Bumblebee threat catalog"
