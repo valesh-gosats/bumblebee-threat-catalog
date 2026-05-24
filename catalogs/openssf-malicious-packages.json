@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "_comment": "Generated from OpenSSF malicious-packages OSV records. This catalog is intended for exact Bumblebee package/version matches only.",
+  "entries": [
+    {
+      "id": "MAL-2026-3329",
+      "name": "Malicious code in api-typings (npm)",
+      "ecosystem": "npm",
+      "package": "api-typings",
+      "versions": [
+        "100.2.0"
+      ],
+      "severity": "critical",
+      "source": "https://osv.dev/vulnerability/MAL-2026-3329",
+      "indicators": {
+        "published": "2026-05-04T16:46:38Z",
+        "modified": "2026-05-12T07:30:41Z",
+        "origins": [
+          {
+            "source": "ossf-package-analysis",
+            "sha256": "f599905f33c2cf15b340aefe57ac68d680d21634484fad6e64ac24aa006e8e97",
+            "versions": [
+              "100.2.0"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "modified": "2026-05-12T07:30:41Z",
+  "published": "2026-05-04T16:46:38Z",
+  "schema_version": "1.7.4",
+  "id": "MAL-2026-9999",
+  "summary": "Malicious code in lolcrate (crates.io)",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "crates.io",
+        "name": "lolcrate"
+      },
+      "versions": [
+        "1.0.0"
+      ]
+    }
+  ]
+}
+

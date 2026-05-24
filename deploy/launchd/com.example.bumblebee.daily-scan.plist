@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.example.bumblebee.daily-scan</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/ABSOLUTE/PATH/TO/REPO/scripts/bumblebee-daily-scan.sh</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>BUMBLEBEE_CONFIG</key>
+      <string>/ABSOLUTE/PATH/TO/REPO/scripts/config.env</string>
+    </dict>
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>3</integer>
+      <key>Minute</key>
+      <integer>45</integer>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/bumblebee-daily-scan.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/bumblebee-daily-scan.stderr.log</string>
+  </dict>
+</plist>
+

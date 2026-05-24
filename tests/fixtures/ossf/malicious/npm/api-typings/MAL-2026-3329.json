@@ -1,0 +1,30 @@
+{
+  "modified": "2026-05-12T07:30:41Z",
+  "published": "2026-05-04T16:46:38Z",
+  "schema_version": "1.7.4",
+  "id": "MAL-2026-3329",
+  "summary": "Malicious code in api-typings (npm)",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "api-typings"
+      },
+      "versions": [
+        "100.2.0"
+      ]
+    }
+  ],
+  "database_specific": {
+    "malicious-packages-origins": [
+      {
+        "source": "ossf-package-analysis",
+        "sha256": "f599905f33c2cf15b340aefe57ac68d680d21634484fad6e64ac24aa006e8e97",
+        "versions": [
+          "100.2.0"
+        ]
+      }
+    ]
+  }
+}
+

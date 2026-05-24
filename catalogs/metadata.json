@@ -1,0 +1,24 @@
+{
+  "schema_version": "1",
+  "generated_at": "2026-05-24T11:31:42Z",
+  "source": {
+    "name": "OpenSSF malicious-packages",
+    "repository": "https://github.com/ossf/malicious-packages",
+    "ref": "fixture-sha"
+  },
+  "stats": {
+    "scanned_files": 2,
+    "scanned_records": 2,
+    "emitted_entries": 1,
+    "skipped_unsupported_ecosystem": 1,
+    "skipped_missing_versions": 0,
+    "skipped_missing_package": 0,
+    "ecosystems": {
+      "npm": 1
+    }
+  },
+  "generator": {
+    "name": "build_bumblebee_catalog.py",
+    "version": "1"
+  }
+}

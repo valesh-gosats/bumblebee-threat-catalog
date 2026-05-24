@@ -1,0 +1,64 @@
+name: Update catalog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout catalog repo
+        uses: actions/checkout@v4
+
+      - name: Checkout OpenSSF malicious-packages
+        uses: actions/checkout@v4
+        with:
+          repository: ossf/malicious-packages
+          path: vendor/ossf-malicious-packages
+          sparse-checkout: |
+            osv/malicious
+          sparse-checkout-cone-mode: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Capture source revision
+        id: source
+        working-directory: vendor/ossf-malicious-packages
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Rebuild Bumblebee catalog
+        run: |
+          python3 scripts/build_bumblebee_catalog.py \
+            --input-dir vendor/ossf-malicious-packages/osv/malicious \
+            --output-dir catalogs \
+            --source-ref "${{ steps.source.outputs.sha }}"
+
+      - name: Validate generated artifacts
+        run: |
+          python3 scripts/validate_catalog.py catalogs/openssf-malicious-packages.json catalogs/metadata.json
+          python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: refresh Bumblebee threat catalog"
+          title: "chore: refresh Bumblebee threat catalog"
+          body: |
+            Automated catalog refresh from `ossf/malicious-packages`.
+
+            - Rebuilt `catalogs/openssf-malicious-packages.json`
+            - Rebuilt `catalogs/metadata.json`
+            - Source ref: `${{ steps.source.outputs.sha }}`
+          branch: automation/update-bumblebee-catalog
+          delete-branch: true
+
