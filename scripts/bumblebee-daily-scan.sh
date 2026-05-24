@@ -25,23 +25,62 @@ FINDINGS="$OUTDIR/daily-findings-$STAMP.ndjson"
 LOG="$OUTDIR/daily-scan-$STAMP.log"
 STATUS="failed"
 EFFECTIVE_CATALOG_DIR=""
+FINDING_COUNT=0
 
 mkdir -p "$OUTDIR"
 : > "$LOG"
 exec > >(tee -a "$LOG") 2>&1
 
-notify_findings() {
+count_finding_records() {
+  python3 - "$FINDINGS" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+count = 0
+if path.exists():
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if obj.get("record_type") == "finding":
+            count += 1
+print(count)
+PY
+}
+
+notify_scan_result() {
+  local title body
   if [ "$NOTIFY_DESKTOP" != "true" ]; then
     return 0
   fi
 
+  if [ "$STATUS" = "findings" ]; then
+    title="Bumblebee alert"
+    if [ "$FINDING_COUNT" -eq 1 ]; then
+      body="1 supply-chain exposure detected"
+    else
+      body="$FINDING_COUNT supply-chain exposures detected"
+    fi
+  elif [ "$STATUS" = "clean" ]; then
+    title="Bumblebee scan complete"
+    body="No supply-chain exposures detected"
+  else
+    title="Bumblebee scan failed"
+    body="Check the scan log for details"
+  fi
+
   if command -v osascript >/dev/null 2>&1; then
-    osascript -e 'display notification "Bumblebee found supply-chain exposure(s)" with title "Bumblebee alert"' || true
+    osascript -e "display notification \"$body\" with title \"$title\"" || true
     return 0
   fi
 
   if command -v notify-send >/dev/null 2>&1; then
-    notify-send "Bumblebee alert" "Supply-chain exposure found" || true
+    notify-send "$title" "$body" || true
     return 0
   fi
 }
@@ -52,6 +91,51 @@ prepare_catalog_dir() {
   find "$CATALOG_DIR" -maxdepth 1 -type f -name '*.json' ! -name 'metadata.json' -exec cp {} "$temp_dir" \;
   EFFECTIVE_CATALOG_DIR="$temp_dir"
   trap 'rm -rf "$EFFECTIVE_CATALOG_DIR"' EXIT
+}
+
+summarize_findings() {
+  python3 - "$FINDINGS" <<'PY'
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+
+path = Path(sys.argv[1])
+if not path.exists() or path.stat().st_size == 0:
+    print("Threat summary: no findings.")
+    raise SystemExit(0)
+
+rows = []
+for line in path.read_text().splitlines():
+    if not line.strip():
+        continue
+    try:
+        obj = json.loads(line)
+    except json.JSONDecodeError:
+        continue
+    if obj.get("record_type") != "finding":
+        continue
+    rows.append(obj)
+
+if not rows:
+    print("Threat summary: no findings.")
+    raise SystemExit(0)
+
+print(f"Threat summary: {len(rows)} finding(s).")
+counts = Counter()
+for row in rows:
+    key = (
+        row.get("catalog_name") or row.get("catalog_id") or "unknown catalog",
+        row.get("package_name") or "unknown package",
+        row.get("version") or "unknown version",
+        row.get("severity") or "unknown severity",
+    )
+    counts[key] += 1
+
+for idx, ((catalog_name, package_name, version, severity), count) in enumerate(counts.items(), start=1):
+    suffix = f" x{count}" if count > 1 else ""
+    print(f"  {idx}. [{severity}] {package_name}@{version} matched {catalog_name}{suffix}")
+PY
 }
 
 run_scan() {
@@ -77,9 +161,9 @@ run_scan() {
     --max-duration "$DAILY_MAX_DURATION" \
     > "$FINDINGS"
 
-  if [ -s "$FINDINGS" ]; then
+  FINDING_COUNT="$(count_finding_records)"
+  if [ "$FINDING_COUNT" -gt 0 ]; then
     echo "FINDINGS DETECTED: $FINDINGS"
-    notify_findings
     STATUS="findings"
   else
     echo "No Bumblebee findings."
@@ -90,8 +174,8 @@ run_scan() {
 }
 
 run_scan
+notify_scan_result
 
 echo "Bumblebee daily scan $STATUS. Log: $LOG"
-if [ "$STATUS" = "findings" ]; then
-  echo "Findings: $FINDINGS"
-fi
+echo "Findings file: $FINDINGS"
+summarize_findings
