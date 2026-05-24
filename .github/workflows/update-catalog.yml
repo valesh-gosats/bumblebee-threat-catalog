@@ -3,7 +3,7 @@ name: Update catalog
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "0 * * * *"
 
 permissions:
   contents: write
@@ -48,7 +48,17 @@ jobs:
           python3 scripts/validate_catalog.py catalogs/openssf-malicious-packages.json catalogs/metadata.json
           python3 -m unittest discover -s tests -p 'test_*.py'
 
+      - name: Detect catalog changes
+        id: changes
+        run: |
+          if git diff --quiet -- catalogs/openssf-malicious-packages.json catalogs/metadata.json; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Create pull request
+        if: steps.changes.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "chore: refresh Bumblebee threat catalog"
@@ -61,4 +71,3 @@ jobs:
             - Source ref: `${{ steps.source.outputs.sha }}`
           branch: automation/update-bumblebee-catalog
           delete-branch: true
-
