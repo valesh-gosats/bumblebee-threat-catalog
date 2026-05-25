@@ -2,10 +2,11 @@
 Description=Run Bumblebee catalog watcher hourly
 
 [Timer]
-OnBootSec=5m
-OnUnitActiveSec=1h
+OnCalendar=hourly
+AccuracySec=1s
+RandomizedDelaySec=0
+OffsetSec=5min
 Persistent=true
 
 [Install]
 WantedBy=timers.target
-

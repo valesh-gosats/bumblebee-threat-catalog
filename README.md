@@ -151,8 +151,8 @@ systemctl --user enable --now bumblebee-daily-scan.timer
 Cron fallback:
 
 ```cron
-17 * * * * BUMBLEBEE_CONFIG=/ABSOLUTE/PATH/TO/REPO/scripts/config.env /ABSOLUTE/PATH/TO/REPO/scripts/bumblebee-catalog-watch.sh
-45 3 * * * BUMBLEBEE_CONFIG=/ABSOLUTE/PATH/TO/REPO/scripts/config.env /ABSOLUTE/PATH/TO/REPO/scripts/bumblebee-daily-scan.sh
+5 * * * * BUMBLEBEE_CONFIG=/ABSOLUTE/PATH/TO/REPO/scripts/config.env /ABSOLUTE/PATH/TO/REPO/scripts/bumblebee-catalog-watch.sh
+30 10,16 * * * BUMBLEBEE_CONFIG=/ABSOLUTE/PATH/TO/REPO/scripts/config.env /ABSOLUTE/PATH/TO/REPO/scripts/bumblebee-daily-scan.sh
 ```
 
 ## Source assumptions

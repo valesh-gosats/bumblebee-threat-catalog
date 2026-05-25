@@ -15,12 +15,20 @@
       <string>/ABSOLUTE/PATH/TO/REPO/scripts/config.env</string>
     </dict>
     <key>StartCalendarInterval</key>
-    <dict>
-      <key>Hour</key>
-      <integer>3</integer>
-      <key>Minute</key>
-      <integer>45</integer>
-    </dict>
+    <array>
+      <dict>
+        <key>Hour</key>
+        <integer>10</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+      </dict>
+      <dict>
+        <key>Hour</key>
+        <integer>16</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+      </dict>
+    </array>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardOutPath</key>
@@ -29,4 +37,3 @@
     <string>/tmp/bumblebee-daily-scan.stderr.log</string>
   </dict>
 </plist>
-

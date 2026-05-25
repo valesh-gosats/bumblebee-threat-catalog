@@ -2,7 +2,8 @@
 Description=Run Bumblebee daily deep scan
 
 [Timer]
-OnCalendar=*-*-* 03:45:00
+OnCalendar=*-*-* 10:30:00
+OnCalendar=*-*-* 16:30:00
 Persistent=true
 
 [Install]
