@@ -1,22 +1,22 @@
 {
   "schema_version": "1",
-  "generated_at": "2026-07-29T04:17:18Z",
+  "generated_at": "2026-11-14T21:15:13Z",
   "source": {
     "name": "OpenSSF malicious-packages",
     "repository": "https://github.com/ossf/malicious-packages",
-    "ref": "e59019f82a7dc3cbfe0d0d8eb34849721517444a"
+    "ref": "6e2d725ecdaa3d9f2adba0f4887d0ffe0e79b8c7"
   },
   "stats": {
-    "scanned_files": 232428,
-    "scanned_records": 232428,
-    "emitted_entries": 28079,
-    "skipped_unsupported_ecosystem": 810,
-    "skipped_missing_versions": 203538,
+    "scanned_files": 241191,
+    "scanned_records": 241191,
+    "emitted_entries": 34833,
+    "skipped_unsupported_ecosystem": 831,
+    "skipped_missing_versions": 205526,
     "skipped_missing_package": 1,
     "ecosystems": {
-      "npm": 19384,
-      "pypi": 5183,
-      "rubygems": 3512
+      "npm": 24858,
+      "pypi": 5655,
+      "rubygems": 4320
     }
   },
   "generator": {
